@@ -36,8 +36,9 @@ declare module 'ewelink-api' {
     toggleDevice(deviceId: string, channel?: number): Promise<DeviceState>
     /**
      * Returns current month power usage on device who supports electricity records, like Sonoff POW.
+     * Setting full to true returns full 100 days of data.
      */
-    getDevicePowerUsage(deviceId: string): Promise<PowerUsage>
+    getDevicePowerUsage(deviceId: string, full?: boolean): Promise<PowerUsage>
     /**
      * Return current temperature and humidity for specified device.
      */

@@ -9,7 +9,7 @@ module.exports = {
    *
    * @returns {Promise<{error: string}|{daily: *, monthly: *}>}
    */
-  async getDevicePowerUsage(deviceId) {
+  async getDevicePowerUsage(deviceId, full = false) {
     const response = await this.getDevicePowerUsageRaw(deviceId);
 
     const error = _get(response, 'error', false);
@@ -21,7 +21,7 @@ module.exports = {
 
     return {
       status: 'ok',
-      ...parsePowerUsage({ hundredDaysKwhData }),
+      ...parsePowerUsage({ hundredDaysKwhData }, full),
     };
   },
 };

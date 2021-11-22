@@ -15,7 +15,7 @@ module.exports = {
    *
    * @returns {Promise<{state: *, status: string}|{msg: string, error: *}>}
    */
-  async setDevicePowerState(deviceId, state, channel = 1) {
+  async setDevicePowerState(deviceId, state, channel = 1, extraParams = {}) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
     const uiid = _get(device, 'extra.extra.uiid', false);
@@ -50,6 +50,12 @@ module.exports = {
     } else {
       params.switch = stateToSwitch;
     }
+
+    if (state === 'custom') {
+      delete params.switch;
+    }
+
+    Object.assign(params, extraParams);
 
     if (this.devicesCache) {
       return ChangeStateZeroconf.set({

@@ -19,6 +19,7 @@ module.exports = {
       at: this.at,
       apiKey: this.apiKey,
       deviceId,
+      appid: this.APP_ID,
     };
 
     if (this.apiKey !== deviceApiKey) {

@@ -14,8 +14,8 @@ class DevicePowerUsageRaw extends WebSocket {
    * @param deviceId
    * @returns {Promise<{error: string}|{data: {hundredDaysKwhData: *}, status: string}|{msg: any, error: *}|{msg: string, error: number}>}
    */
-  static async get({ apiUrl, at, apiKey, deviceId }) {
-    const payloadLogin = wssLoginPayload({ at, apiKey, appid: this.APP_ID });
+  static async get({ apiUrl, at, apiKey, deviceId, appid }) {
+    const payloadLogin = wssLoginPayload({ at, apiKey, appid });
 
     const payloadUpdate = wssUpdatePayload({
       apiKey,
@@ -32,14 +32,27 @@ class DevicePowerUsageRaw extends WebSocket {
       return { error: errors.noPower };
     }
 
-    const error = _get(response[1], 'error', false);
+    var resIdx = 1;
+    if (response.length > 2) {
+      // find the right response
+      for (var i = 0; i < response.length; i++) {
+        if ('config' in response[i]) {
+          if ('hundredDaysKwhData' in response[i].config) {
+            resIdx = i;
+            break;
+          }
+        }
+      }
+    }
 
-    if (error === 403) {
-      return { error, msg: response[1].reason };
+    const error = _get(response[resIdx], 'error', false);
+
+    if (error === 403 || error === 503) {
+      return { error, msg: response[resIdx].reason };
     }
 
     const hundredDaysKwhData = _get(
-      response[1],
+      response[resIdx],
       'config.hundredDaysKwhData',
       false
     );

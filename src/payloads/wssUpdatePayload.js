@@ -1,9 +1,9 @@
 const { timestamp } = require('../helpers/utilities');
 
-const wssUpdatePayload = ({ apiKey, deviceId, params }) => {
+const wssUpdatePayload = ({ apiKey, deviceApiKey, deviceId, params }) => {
   const payload = {
     action: 'update',
-    apikey: apiKey,
+    apikey: deviceApiKey,
     deviceid: deviceId,
     selfApikey: apiKey,
     params,

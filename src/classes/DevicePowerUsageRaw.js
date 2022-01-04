@@ -14,11 +14,12 @@ class DevicePowerUsageRaw extends WebSocket {
    * @param deviceId
    * @returns {Promise<{error: string}|{data: {hundredDaysKwhData: *}, status: string}|{msg: any, error: *}|{msg: string, error: number}>}
    */
-  static async get({ apiUrl, at, apiKey, deviceId, appid }) {
+  static async get({ apiUrl, at, apiKey, deviceApiKey, deviceId, appid }) {
     const payloadLogin = wssLoginPayload({ at, apiKey, appid });
 
     const payloadUpdate = wssUpdatePayload({
       apiKey,
+      deviceApiKey,
       deviceId,
       params: { hundredDaysKwh: 'get' },
     });
@@ -28,27 +29,23 @@ class DevicePowerUsageRaw extends WebSocket {
       payloadUpdate,
     ]);
 
-    if (response.length === 1) {
-      return { error: errors.noPower };
-    }
+    var resIdx = 0;
+    for (var i = 0; i < response.length; i++) {
+      if ('error' in response[i] && response[i].error != 0) {
+        // console.log(response);
+        var ret = { error: response[i].error };
+        if (response[i].error in errors) {
+          ret['msg'] = errors[response[i].error];
+        }
+        return ret;
+      }
 
-    var resIdx = 1;
-    if (response.length > 2) {
-      // find the right response
-      for (var i = 0; i < response.length; i++) {
-        if ('config' in response[i]) {
-          if ('hundredDaysKwhData' in response[i].config) {
-            resIdx = i;
-            break;
-          }
+      if ('config' in response[i]) {
+        if ('hundredDaysKwhData' in response[i].config) {
+          resIdx = i;
+          break;
         }
       }
-    }
-
-    const error = _get(response[resIdx], 'error', false);
-
-    if (error === 403 || error === 503) {
-      return { error, msg: response[resIdx].reason };
     }
 
     const hundredDaysKwhData = _get(
@@ -58,7 +55,8 @@ class DevicePowerUsageRaw extends WebSocket {
     );
 
     if (!hundredDaysKwhData) {
-      return { error: errors.noPower };
+      // console.log(response);
+      return { error: 404, msg: errors.noPower };
     }
 
     return {

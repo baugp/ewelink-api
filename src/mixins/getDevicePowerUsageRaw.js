@@ -18,13 +18,10 @@ module.exports = {
       apiUrl: this.getApiWebSocket(),
       at: this.at,
       apiKey: this.apiKey,
+      deviceApiKey: deviceApiKey,
       deviceId,
       appid: this.APP_ID,
     };
-
-    if (this.apiKey !== deviceApiKey) {
-      actionParams.apiKey = deviceApiKey;
-    }
 
     return DevicePowerUsageRaw.get(actionParams);
   },

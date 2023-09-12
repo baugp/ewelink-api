@@ -26,7 +26,7 @@ const parsePowerUsage = ({ hundredDaysKwhData }, full) => {
     }
 
     dailyUsage.push({
-      date: (new Date((new Date(today)).setDate(days - day))).toLocaleDateString('en-CA'),
+      date: (new Date((new Date(today)).setDate(days - day))).toLocaleDateString('en-ZA'),
       usage: E,
     });
 

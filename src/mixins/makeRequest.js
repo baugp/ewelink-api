@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { _get, _empty, toQueryString } = require('../helpers/utilities');
+const { _get, _empty, toQueryString, nonce } = require('../helpers/utilities');
 const errors = require('../data/errors');
 
 module.exports = {
@@ -31,6 +31,7 @@ module.exports = {
       headers: {
         Authorization: `Bearer ${this.at}`,
         'Content-Type': 'application/json',
+        'X-CK-Nonce': nonce
       },
     };
 

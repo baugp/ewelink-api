@@ -11,18 +11,11 @@ module.exports = {
     const { APP_ID } = this;
 
     const response = await this.makeRequest({
-      uri: '/user/device',
-      qs: {
-        lang: 'en',
-        appid: APP_ID,
-        ts: timestamp,
-        version: 8,
-        getTags: 1,
-      },
+      uri: '/device/thing',
     });
 
     const error = _get(response, 'error', false);
-    const devicelist = _get(response, 'devicelist', false);
+    const devicelist = _get(response, 'data.thingList', false);
 
     if (error) {
       return { error, msg: errors[error] };

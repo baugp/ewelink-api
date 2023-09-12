@@ -1,6 +1,4 @@
-const nonce = Math.random()
-  .toString(36)
-  .slice(5);
+const nonce = Math.random().toString(36).slice(-8);
 
 const timestamp = Math.floor(new Date() / 1000);
 

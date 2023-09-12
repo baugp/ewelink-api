@@ -16,13 +16,13 @@ module.exports = {
     const { APP_ID } = this;
 
     const device = await this.makeRequest({
-      uri: `/user/device/${deviceId}`,
-      qs: {
-        deviceid: deviceId,
-        appid: APP_ID,
-        nonce,
-        ts: timestamp,
-        version: 8,
+      method: 'post',
+      uri: `/device/thing`,
+      body: {
+        thingList: [{
+          itemType: 1,
+          id: deviceId
+        }]
       },
     });
 
@@ -32,6 +32,6 @@ module.exports = {
       return { error, msg: errors[error] };
     }
 
-    return device;
+    return device.data.thingList[0].itemData;
   },
 };

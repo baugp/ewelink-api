@@ -18,7 +18,7 @@ module.exports = {
   async setDevicePowerState(deviceId, state, channel = 1, extraParams = {}) {
     const device = await this.getDevice(deviceId);
     const error = _get(device, 'error', false);
-    const uiid = _get(device, 'extra.extra.uiid', false);
+    const uiid = _get(device, 'extra.uiid', false);
 
     let status = _get(device, 'params.switch', false);
     const switches = _get(device, 'params.switches', false);
@@ -71,14 +71,11 @@ module.exports = {
 
     const response = await this.makeRequest({
       method: 'post',
-      uri: '/user/device/status',
+      uri: '/device/thing/status',
       body: {
-        deviceid: deviceId,
-        params,
-        appid: APP_ID,
-        nonce,
-        ts: timestamp,
-        version: 8,
+        type: 1,
+        id: deviceId,
+        params: params,
       },
     });
 

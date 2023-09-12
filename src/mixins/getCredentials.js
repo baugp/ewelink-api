@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const { _get } = require('../helpers/utilities');
+const { _get, nonce } = require('../helpers/utilities');
 const credentialsPayload = require('../payloads/credentialsPayload');
 const { makeAuthorizationSign } = require('../helpers/ewelink');
 const errors = require('../data/errors');
@@ -14,17 +14,19 @@ module.exports = {
   async getCredentials() {
     const { APP_ID, APP_SECRET } = this;
 
-    const body = credentialsPayload({
-      appid: APP_ID,
+    const body = {
       email: this.email,
-      phoneNumber: this.phoneNumber,
       password: this.password,
-    });
+      countryCode: this.countryCode,
+    };
 
     const request = await fetch(`${this.getApiUrl()}/user/login`, {
       method: 'post',
       headers: {
         Authorization: `Sign ${makeAuthorizationSign(APP_SECRET, body)}`,
+        'X-CK-Appid': APP_ID,
+        'X-CK-Nonce': nonce,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(body),
     });
@@ -32,7 +34,7 @@ module.exports = {
     let response = await request.json();
 
     const error = _get(response, 'error', false);
-    const region = _get(response, 'region', false);
+    const region = _get(response, 'data.region', false);
 
     if (error && [400, 401, 404].indexOf(parseInt(error)) !== -1) {
       return { error: 406, msg: errors['406'] };
@@ -47,8 +49,8 @@ module.exports = {
       return { error, msg: 'Region does not exist' };
     }
 
-    this.apiKey = _get(response, 'user.apikey', '');
-    this.at = _get(response, 'at', '');
+    this.apiKey = _get(response, 'data.user.apikey', '');
+    this.at = _get(response, 'data.at', '');
     return response;
   },
 };

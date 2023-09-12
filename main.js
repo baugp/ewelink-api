@@ -13,6 +13,7 @@ class eWeLink {
       email = null,
       phoneNumber = null,
       password = null,
+      countryCode = '+1',
       at = null,
       apiKey = null,
       devicesCache = null,
@@ -40,6 +41,7 @@ class eWeLink {
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
+    this.countryCode = countryCode;
     this.at = at;
     this.apiKey = apiKey;
     this.devicesCache = devicesCache;
@@ -75,7 +77,7 @@ class eWeLink {
    * @returns {string}
    */
   getApiUrl() {
-    return `https://${this.region}-api.coolkit.cc:8080/api`;
+    return `https://${this.region}-apia.coolkit.cc/v2`;
   }
 
   /**

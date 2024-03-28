@@ -1,5 +1,8 @@
-const APP_ID = 'Uw83EKZFxdif7XFXEsrpduz5YyjP7nTl';
-const APP_SECRET = 'mXLOjea0woSMvK9gw7Fjsy7YlFO4iSu6';
+const APP_ID = '4s1FXKC9FaGfoqXhmXSJneb3qcm1gOak';
+const APP_SECRET = 'oKvCM06gvwkRbfetd6qWRrbC3rFrbIpV';
+
+// const APP_ID = 'R8Oq3y0eSZSYdKccHlrQzT1ACCOUT9Gv';
+// const APP_SECRET = '1ve5Qk9GXfUhKAn1svnKwpAlxXkMarru';
 
 module.exports = {
   APP_ID,

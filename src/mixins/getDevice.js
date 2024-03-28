@@ -17,7 +17,7 @@ module.exports = {
 
     const device = await this.makeRequest({
       method: 'post',
-      uri: `/device/thing`,
+      uri: '/device/thing',
       body: {
         thingList: [{
           itemType: 1,
